@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -13,7 +15,6 @@ void main() async {
 
 // Get a specific camera from the list of available cameras.
   final firstCamera = cameras.first;
-
   runApp(MaterialApp(
     home: TakePictureScreen(
       // Pass the appropriate camera to the TakePictureScreen widget.

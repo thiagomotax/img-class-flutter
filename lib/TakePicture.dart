@@ -1,5 +1,7 @@
 // A screen that takes in a list of cameras and the Directory to store images.
 
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -79,11 +81,12 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             // Construct the path where the image should be saved using the
             // pattern package.
+            Random rd = Random();
             final path = join(
               // Store the picture in the temp directory.
               // Find the temp directory using the `path_provider` plugin.
               (await getTemporaryDirectory()).path,
-              '${DateTime.now()}.png',
+              '${rd.nextInt(22)}.png',
             );
             print("caminho: "+ path);
 
