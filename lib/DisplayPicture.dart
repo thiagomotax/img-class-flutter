@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:color_thief_flutter/color_thief_flutter.dart';
+import 'package:color_thief_flutter/utils.dart';
 
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
@@ -19,12 +21,21 @@ class DisplayPictureScreen extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Image.file(File(imagePath)),
-          ),
+    ),
           Container(
-            child: RaisedButton(
-              color: Colors.orange,
-              onPressed: cortarImagem,
-              child: Text("Cortar"),
+            child: Row(
+              children: <Widget>[
+                RaisedButton(
+                  color: Colors.orange,
+                  onPressed: cortarImagem,
+                  child: Text("Cortar"),
+                ),
+                RaisedButton(
+                  color: Colors.orange,
+                  onPressed: analisarImgem,
+                  child: Text("Analisar"),
+                ),
+              ],
             ),
           )
         ],
@@ -32,6 +43,16 @@ class DisplayPictureScreen extends StatelessWidget {
     );
   }
 
+  analisarImgem(){
+    final imageProvider = Image(image: FileImage(File(imagePath)));
+
+
+    getPaletteFromUrl('https://colorate.azurewebsites.net/SwatchColor/000000').then((palette) {
+      print(palette); // [[R,G,B]]
+    });
+
+
+  }
   cortarImagem() async {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: imagePath,

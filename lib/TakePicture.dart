@@ -85,6 +85,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
               (await getTemporaryDirectory()).path,
               '${DateTime.now()}.png',
             );
+            print("caminho: "+ path);
 
             // Attempt to take a picture and log where it's been saved.
             await _controller.takePicture(path);
