@@ -15,16 +15,21 @@ import 'dart:convert';
 
 import 'package:flutter/painting.dart';
 
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
+class DisplayImage extends StatefulWidget {
+  String imagePath;
   Color cor;
 
-  DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+  DisplayImage({Key key, this.imagePath}) : super(key: key);
 
   @override
+  _DisplayImageState createState() => _DisplayImageState();
+}
+
+class _DisplayImageState extends State<DisplayImage> {
+  @override
+  Color cor = Colors.white;
+
   Widget build(BuildContext context) {
-    //teste
-    cor = Colors.deepOrange;
     return Scaffold(
       appBar: AppBar(
         title: Text('Imagem capturada'),
@@ -32,33 +37,64 @@ class DisplayPictureScreen extends StatelessWidget {
       ),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
+      bottomSheet: Padding(
+        padding: EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FloatingActionButton.extended(
+              onPressed: cortarImagem,
+              label: Text('Cortar'),
+              icon: Icon(Icons.content_cut),
+              backgroundColor: Colors.pink,
+              heroTag: null,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 3),
+            ),
+            FloatingActionButton.extended(
+              onPressed: analisarImgem,
+              label: Text('Analisar'),
+              icon: Icon(Icons.done),
+              backgroundColor: Colors.pink,
+              heroTag: null,
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: <Widget>[
           Container(
-            child: Image.file(File(imagePath)),
+            padding: EdgeInsets.all(10),
+            height: 400,
+            width: 400,
+            child: Image.file(File(widget.imagePath)),
           ),
           Container(
             child: Row(
               children: <Widget>[
-                RaisedButton(
-                  color: Colors.orange,
-                  onPressed: cortarImagem,
-                  child: Text("Cortar"),
+//                RaisedButton(
+//                  color: Colors.orange,
+//                  onPressed: cortarImagem,
+//                  child: Text("Cortar"),
+//                ),
+//                RaisedButton(
+//                  color: Colors.orange,
+//                  onPressed: analisarImgem,
+//                  child: Text("Analisar"),
+//                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Cor predominante da imagem: ")
+                  ,
                 ),
-                RaisedButton(
-                  color: Colors.orange,
-                  onPressed: analisarImgem,
-                  child: Text("Analisar"),
-                ),
-                Text("Cor predominante da imagem"),
                 Container(
-                  child: Text("oi"),
                   padding: EdgeInsets.all(30),
                   color: cor,
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -69,18 +105,20 @@ class DisplayPictureScreen extends StatelessWidget {
   }
 
   Future<ui.Image> load() async {
-    ByteData data = await rootBundle.load(imagePath);
+    ByteData data = await rootBundle.load(widget.imagePath);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
     ui.FrameInfo fi = await codec.getNextFrame();
     getColorFromImage(fi.image).then((color) {
       print(color); // [R,G,B]
-      cor = Color.fromRGBO(color[0], color[1], color[2], 0);
+      setState(() {
+        cor = Color.fromRGBO(color[0], color[1], color[2], 1);
+      });
     });
   }
 
   cortarImagem() async {
     return await ImageCropper.cropImage(
-        sourcePath: imagePath,
+        sourcePath: widget.imagePath,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,

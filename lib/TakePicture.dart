@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:img_class/DisplayImage.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -53,7 +54,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tire uma foto para classificá-la')),
+      appBar: AppBar(title: Text('Tire uma foto para classificá-la'),
+      backgroundColor: Colors.deepOrange,),
       // Wait until the controller is initialized before displaying the
       // camera preview. Use a FutureBuilder to display a loading spinner
       // until the controller has finished initializing.
@@ -86,7 +88,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
               // Store the picture in the temp directory.
               // Find the temp directory using the `path_provider` plugin.
               (await getTemporaryDirectory()).path,
-              '${rd.nextInt(22)}.png',
+              '${rd.nextInt(31221321)}.png',
             );
             print("caminho: "+ path);
 
@@ -97,7 +99,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
+                builder: (context) => DisplayImage(imagePath: path),
               ),
             );
           } catch (e) {
